@@ -1,9 +1,18 @@
 import React from "react";
+import Login from "./features/auth/pages/login";
+import Home from "./features/Home";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 const App: React.FC = () => {
   return (
     <div>
-      <h1>App</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+
+      </BrowserRouter>
     </div>
   )
 }
