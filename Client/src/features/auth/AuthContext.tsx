@@ -47,10 +47,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (credentials: LoginPayload) => {
       setActionLoading(true);
       try {
-        const { token, admin } = await authService.login(credentials);
-        localStorage.setItem("token", token);
-        setAdmin(admin);
-        navigate("/products");
+        const res = await authService.login(credentials);
+        localStorage.setItem("token", res.token);
+        setAdmin(res.admin || { id: "admin", username: credentials.username });
+        navigate("/admin/products");
       } finally {
         setActionLoading(false);
       }

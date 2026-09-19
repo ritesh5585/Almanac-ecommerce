@@ -6,59 +6,93 @@ export interface IProduct extends Document {
   price: number;
   stock: number;
   category: string;
-  images: string[];
+  imageUrl?: string;
+  images?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
-
-const urlRegex = /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif|avif)(\?.*)?$/i;
 
 const productSchema = new Schema<IProduct>(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Product name is required"],
       trim: true,
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "Product description is required"],
       trim: true,
     },
     price: {
       type: Number,
-      required: true,
+      required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
     },
     stock: {
       type: Number,
-      required: true,
+      required: [true, "Stock is required"],
       min: [0, "Stock cannot be negative"],
       default: 0,
     },
     category: {
       type: String,
-      required: true,
+      required: [true, "Category is required"],
       trim: true,
       index: true,
     },
+    imageUrl: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     images: {
       type: [String],
-      required: true,
-      validate: [
-        {
-          validator: (arr: string[]) => arr.length > 0,
-          message: "At least one image URL is required",
-        },
-        {
-          validator: (arr: string[]) => arr.every((url) => urlRegex.test(url)),
-          message: "One or more image URLs are invalid",
-        },
-      ],
+      default: [],
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      transform(_doc, ret: Record<string, any>) {
+        if (
+          !ret.imageUrl &&
+          Array.isArray(ret.images) &&
+          ret.images.length > 0
+        ) {
+          ret.imageUrl = ret.images[0];
+        }
+        if ((!ret.images || ret.images.length === 0) && ret.imageUrl) {
+          ret.images = [ret.imageUrl];
+        }
+        return ret;
+      },
+    },
+    toObject: {
+      transform(_doc, ret: Record<string, any>) {
+        if (
+          !ret.imageUrl &&
+          Array.isArray(ret.images) &&
+          ret.images.length > 0
+        ) {
+          ret.imageUrl = ret.images[0];
+        }
+        if ((!ret.images || ret.images.length === 0) && ret.imageUrl) {
+          ret.images = [ret.imageUrl];
+        }
+        return ret;
+      },
+    },
+  },
 );
+
+productSchema.pre("validate", function () {
+  if (!this.imageUrl && Array.isArray(this.images) && this.images.length > 0) {
+    this.imageUrl = this.images[0] || "";
+  } else if (this.imageUrl && (!this.images || this.images.length === 0)) {
+    this.images = [this.imageUrl];
+  }
+});
 
 const Item: Model<IProduct> = mongoose.model<IProduct>("Item", productSchema);
 

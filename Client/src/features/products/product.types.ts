@@ -6,6 +6,7 @@ export interface Product {
   stock: number;
   category: string;
   imageUrl: string;
+  images?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -24,12 +25,12 @@ export interface ProductFormData {
   stock: number;
   category: string;
   imageUrl: string;
+  images?: string[];
 }
 
 export interface ProductQueryParams {
   category?: string;
   search?: string;
-  sort?: "priceAsc" | "priceDesc" | "newest";
   page?: number;
   limit?: number;
 }
