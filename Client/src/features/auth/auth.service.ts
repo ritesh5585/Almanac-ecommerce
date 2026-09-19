@@ -7,7 +7,6 @@ import type {
 } from "./auth.types";
 
 export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
-  // Translate UI shape → backend shape
   const body: LoginRequest = {
     email: payload.username,
     password: payload.password,
