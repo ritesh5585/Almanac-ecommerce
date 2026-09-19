@@ -1,5 +1,4 @@
 import React from "react";
-import Login from "./features/auth/pages/login";
 import Home from "./features/Home";
 import { BrowserRouter, Routes, Route } from "react-router";
 
@@ -8,8 +7,8 @@ const App: React.FC = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
+          {/* <Route path="/" element={<Login />} /> */}
+          <Route path="/" element={<Home />} />
         </Routes>
 
       </BrowserRouter>
