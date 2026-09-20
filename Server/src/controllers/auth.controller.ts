@@ -55,7 +55,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const me = asyncHandler(async (req: Request, res: Response) => {
-  const adminId = (req.user as any)?._id || (req.user as any)?.id;
+  const user = (req as any).user;
+  const adminId = user?._id || user?.id;
   const admin = await Admin.findById(adminId).select("-password -passwordHash");
 
   if (!admin) {

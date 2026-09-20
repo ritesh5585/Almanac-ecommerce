@@ -41,7 +41,7 @@ export const authMiddleware = async (
       });
     }
 
-    req.user = admin;
+    (req as any).user = admin;
     next();
   } catch (error: any) {
     return res.status(401).json({
