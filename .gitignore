@@ -5,7 +5,4 @@ Server/.env
 Client/.env
 .env
 
-# Build output — never commit compiled artifacts
 Server/dist
-*.js.map
-*.d.ts.map
